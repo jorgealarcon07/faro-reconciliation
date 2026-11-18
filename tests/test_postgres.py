@@ -78,7 +78,10 @@ def test_repeated_partial_retries_and_conflict_rollback_of_provisional_effect(co
     assert pending["event_states"]["syn_1_refund"] == "pending_dependency"
     assert pending["event_states"]["syn_1_alias"] == "duplicate_effect"
     assert sum(row["event_id"] == "syn_1_a" for row in pending["receipts"]) == 2
-    ingest(conn, case, feed, page_size=3, until=17)
+    positions = [index for index, row in enumerate(feed.events) if row["event_id"] == "syn_6_a"]
+    ingest(conn, case, feed, page_size=3, until=positions[0] + 1)
+    assert report.detail(conn, case, "syn_p6")["expected_minor"] == 9000
+    ingest(conn, case, feed, page_size=3, until=positions[1] + 1)
     assert report.detail(conn, case, "syn_p6")["expected_minor"] == 0
     assert (
         len(

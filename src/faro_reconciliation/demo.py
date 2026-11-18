@@ -2,6 +2,7 @@
 
 import json
 import platform
+import shutil
 import subprocess
 import time
 from pathlib import Path
@@ -113,15 +114,24 @@ def run(conn, case_id, output):
             elif value != actual[key]:
                 raise ReconciliationError(f"Interim oracle mismatch for {name}/{key}")
     oracle = verify_oracle(payload["snapshot"])
-    git = subprocess.run(
-        ["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True, text=True, check=False
+    git_executable = shutil.which("git")
+    git = (
+        subprocess.run(
+            [git_executable, "rev-parse", "HEAD"],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        if git_executable
+        else None
     )
     run_manifest = {
         "run_id": case_id,
         "source_namespace": NAMESPACE,
         "data_kind": "synthetic",
         "dataset_sha256": feed.feed_id,
-        "git_sha": git.stdout.strip() or "unversioned",
+        "git_sha": (git.stdout.strip() if git and git.returncode == 0 else "unversioned"),
         "contract_version": VERSION,
         "contract_lock_sha256": digest(json.loads((ROOT / "contracts.lock.json").read_text())),
         "seed": bundle.manifest["seed"],

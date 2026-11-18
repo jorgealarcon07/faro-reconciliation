@@ -1,0 +1,34 @@
+name: Verify reconciliation
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    services:
+      postgres:
+        image: postgres:17.12-bookworm
+        env:
+          POSTGRES_USER: faro_reconcile
+          POSTGRES_DB: faro_reconcile
+          POSTGRES_PASSWORD: ci-fixture-only
+        ports: ["55433:5432"]
+        options: >-
+          --health-cmd "pg_isready -U faro_reconcile -d faro_reconcile"
+          --health-interval 3s --health-timeout 5s --health-retries 20
+    env:
+      FARO2_DB_PASSWORD: ci-fixture-only
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.lock && pip install --no-build-isolation --no-deps -e .
+      - run: python -m pip check && ruff check . && ruff format --check .
+      - run: pytest -q --junitxml=local/ci/tests.xml
+      - run: faro-reconcile demo --case ci-demo --output local/ci/demo
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reconciliation-evidence
+          path: local/ci/
