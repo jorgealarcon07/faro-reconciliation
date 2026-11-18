@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "payout_id",
+    "issue_id",
+    "actor",
+    "reason",
+    "evidence_effect_id"
+  ],
+  "properties": {
+    "payout_id": {
+      "type": "string",
+      "pattern": "^syn_[A-Za-z0-9_-]{1,60}$"
+    },
+    "issue_id": {
+      "type": "string"
+    },
+    "actor": {
+      "type": "string",
+      "minLength": 1
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 5
+    },
+    "evidence_effect_id": {
+      "type": "string",
+      "pattern": "^syn_[A-Za-z0-9_-]{1,60}$"
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "run_id",
+    "source_namespace",
+    "data_kind",
+    "dataset_sha256",
+    "git_sha",
+    "contract_version",
+    "seed",
+    "as_of",
+    "rows",
+    "data_sha256"
+  ],
+  "properties": {
+    "run_id": {
+      "type": "string"
+    },
+    "source_namespace": {
+      "const": "payments_cop_synthetic"
+    },
+    "data_kind": {
+      "const": "synthetic"
+    },
+    "dataset_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "git_sha": {
+      "type": "string"
+    },
+    "contract_version": {
+      "const": "1.0.0"
+    },
+    "seed": {
+      "type": "integer"
+    },
+    "as_of": {
+      "type": "string"
+    },
+    "rows": {
+      "type": "integer"
+    },
+    "data_sha256": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true
+}

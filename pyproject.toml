@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools==80.9.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "faro-reconciliation"
+version = "0.1.0"
+requires-python = ">=3.12,<3.13"
+dependencies = ["psycopg[binary]==3.3.9", "jsonschema==4.26.0", "psutil==7.2.2"]
+
+[project.scripts]
+faro-reconcile = "faro_reconciliation.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["integration: requires a disposable project PostgreSQL database"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I", "UP", "B"]

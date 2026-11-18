@@ -1,0 +1,105 @@
+{
+  "basis": "Manually specified amounts, independently enumerated before executing the engine.",
+  "stages": {
+    "pending": {
+      "expected_minor": 5700,
+      "declared_minor": 8600,
+      "difference_minor": 2900,
+      "state": "exception",
+      "issue": "missing_capture"
+    },
+    "mismatch": {
+      "expected_minor": 8700,
+      "declared_minor": 8600,
+      "difference_minor": -100,
+      "state": "exception",
+      "issue": "payout_mismatch"
+    }
+  },
+  "payouts": {
+    "syn_p1": [
+      "reconciled",
+      8700,
+      8700,
+      0,
+      []
+    ],
+    "syn_p2": [
+      "reconciled",
+      4000,
+      4000,
+      0,
+      []
+    ],
+    "syn_p3": [
+      "reconciled",
+      12000,
+      12000,
+      0,
+      []
+    ],
+    "syn_p4": [
+      "provisional",
+      10000,
+      10000,
+      0,
+      []
+    ],
+    "syn_p5": [
+      "exception",
+      0,
+      5000,
+      5000,
+      [
+        "missing_invoice",
+        "payout_mismatch"
+      ]
+    ],
+    "syn_p6": [
+      "exception",
+      0,
+      0,
+      0,
+      [
+        "event_payload_conflict"
+      ]
+    ],
+    "syn_p7": [
+      "exception",
+      4000,
+      4000,
+      0,
+      [
+        "refunds_exceed_capture"
+      ]
+    ],
+    "syn_p8": [
+      "reconciled",
+      0,
+      0,
+      0,
+      []
+    ],
+    "syn_p9": [
+      "provisional",
+      10000,
+      null,
+      null,
+      []
+    ],
+    "syn_p10": [
+      "reconciled",
+      10000,
+      10000,
+      0,
+      []
+    ]
+  },
+  "coverage": {
+    "syn_i1": 1000,
+    "syn_i2": 6000,
+    "syn_i3": -2000,
+    "syn_i8": 10000,
+    "syn_i10": 0
+  }
+}

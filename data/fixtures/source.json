@@ -1,0 +1,14 @@
+{
+  "seed": 2026,
+  "scenario": "manual",
+  "source_namespace": "payments_cop_synthetic",
+  "data_kind": "synthetic",
+  "license": "CC0-1.0",
+  "sha256": {
+    "invoices.jsonl": "3733a91dd821072e1e18e691e794961b439fcdda7f415862cbca8a022dcf85b2",
+    "lots.json": "5427983b5ecf6d6431017f2a3376f529659352b24a98a9625408f4cd9406ab65",
+    "payouts.csv": "4d31986423a329cf34eac54e7bb1d75126e944ae2f8a3dae3ed93074cf306a34",
+    "deliveries.jsonl": "ba1c8e5b0e30b8d84acc627aa2430dd699e8c09729201f30e279e23668dca663"
+  },
+  "dataset_sha256": "d24990e4dee693bd86d6b8cbb7aef645a6dabedd23971592945d90c20968bc80"
+}

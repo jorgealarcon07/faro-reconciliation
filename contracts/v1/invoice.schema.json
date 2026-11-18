@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "namespace",
+    "invoice_id",
+    "original_minor",
+    "currency"
+  ],
+  "properties": {
+    "namespace": {
+      "const": "payments_cop_synthetic"
+    },
+    "invoice_id": {
+      "type": "string",
+      "pattern": "^syn_[A-Za-z0-9_-]{1,60}$"
+    },
+    "original_minor": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 1000000000000
+    },
+    "currency": {
+      "const": "COP"
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,10 @@
+{
+  "version": "1.0.0",
+  "sha256": {
+    "decision_record.schema.json": "9825f85e5e8afede8cf208ff69bc920d351dd88502b1303ae3a40c4555b9d488",
+    "invoice.schema.json": "95de9aa0076f166dbe567f49572dafefe8dbba85c43555b2a0b46cd33a49dc94",
+    "payment_event.schema.json": "d1ab63bdc19d72735a0ce248192cf79bc9775ac459e869c56a9bac7a60277fa8",
+    "payout_statement.schema.json": "0226e7ba529f335d1ccba60e852f6d821cbadcaaec1e3b65c33af789b4e44709",
+    "run_manifest.schema.json": "832de8986ddd6fa45e084929008e24969cbebc9c22efff81349cc34b5d90168c"
+  }
+}

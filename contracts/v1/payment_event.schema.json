@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "namespace",
+    "event_id",
+    "business_effect_id",
+    "event_type",
+    "invoice_id",
+    "payout_id",
+    "amount_minor",
+    "currency",
+    "reference_effect_id",
+    "occurred_at",
+    "received_at",
+    "finalized",
+    "schema_version"
+  ],
+  "properties": {
+    "namespace": {
+      "const": "payments_cop_synthetic"
+    },
+    "event_id": {
+      "type": "string",
+      "pattern": "^syn_[A-Za-z0-9_-]{1,60}$"
+    },
+    "business_effect_id": {
+      "type": "string",
+      "pattern": "^syn_[A-Za-z0-9_-]{1,60}$"
+    },
+    "event_type": {
+      "enum": [
+        "capture",
+        "refund",
+        "fee",
+        "payout",
+        "reversal"
+      ]
+    },
+    "invoice_id": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^syn_[A-Za-z0-9_-]{1,60}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "payout_id": {
+      "type": "string",
+      "pattern": "^syn_[A-Za-z0-9_-]{1,60}$"
+    },
+    "amount_minor": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 1000000000000
+    },
+    "currency": {
+      "const": "COP"
+    },
+    "reference_effect_id": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^syn_[A-Za-z0-9_-]{1,60}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "occurred_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "received_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "finalized": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "schema_version": {
+      "const": "1.0.0"
+    }
+  },
+  "additionalProperties": false
+}
