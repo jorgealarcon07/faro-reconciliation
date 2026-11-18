@@ -1,0 +1,24 @@
+{
+  "project": "faro-reconciliation",
+  "title": "Conciliación y excepciones",
+  "data_kind": "synthetic",
+  "dataset_license": "CC0-1.0",
+  "verified_test_count": 35,
+  "demo_lots": 10,
+  "demo_state_counts": {
+    "reconciled": 5,
+    "provisional": 2,
+    "exception": 3
+  },
+  "pilot_fingerprint": "454c392e3468da7042c53daa6b911e94f0a09a2f4d39a2672f028892ccdad7c7",
+  "scale_receipts": 100000,
+  "scale_ingestion_seconds": 25.602155100000346,
+  "scale_oracle": {
+    "expected_exception_lots": 325,
+    "correct_exception_lots": 325,
+    "false_closures": 0,
+    "false_exception_lots": 0
+  },
+  "business_impact_observed": null,
+  "runtime_verified": "Python and PostgreSQL natively on Windows"
+}

@@ -1,0 +1,267 @@
+{
+  "system": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.14",
+  "postgres": "17.12",
+  "cpu_logical": 12,
+  "ram_bytes": 16227487744,
+  "results": [
+    {
+      "case": "benchmark-1000-clean",
+      "profile": "clean",
+      "invoices": 1000,
+      "prepare_seconds": 0.40353179999965505,
+      "input_sha256": "3ad72f93cd572ee422a0a022507b55f5e4e9b22e7fa9e151ba695cb9d866f762",
+      "data_sha256": "da92358b7117b22a64df5c5fd2f59fa1427177d9e4f387d778733536b2dbb5b6",
+      "oracle": {
+        "expected_exception_lots": 0,
+        "correct_exception_lots": 0,
+        "false_closures": 0,
+        "false_exception_lots": 0
+      },
+      "ingestion": {
+        "processed_n": 3000,
+        "start_cursor": 0,
+        "next_cursor": 3000,
+        "pages": 3,
+        "elapsed_seconds": 0.5083328999999139,
+        "deliveries_per_second": 5901.644375173253,
+        "retries": {}
+      },
+      "metrics": {
+        "receipts": 3000,
+        "invalid": 0,
+        "unique_payloads": 3000,
+        "identical_payload_repeats": 0,
+        "lot_states": {
+          "reconciled": 1000
+        },
+        "lots": 1000,
+        "event_states": {
+          "applied": 3000
+        },
+        "open_issues": 0,
+        "oldest_issue_seconds": 0,
+        "absolute_unexplained_minor": 0,
+        "movements": 2000
+      },
+      "peak_python_rss_bytes": 56717312
+    },
+    {
+      "case": "benchmark-1000-duplicates",
+      "profile": "duplicates",
+      "invoices": 1000,
+      "prepare_seconds": 0.42191769999953976,
+      "input_sha256": "986706ae746d357c8880e5c0e96af74b0b49c8286d87a26f42762b4a9196cf79",
+      "data_sha256": "47a196279ca5c82b0278d39f518a1bbaf458ff4b1d38b868dfbd4f981e731b7e",
+      "oracle": {
+        "expected_exception_lots": 0,
+        "correct_exception_lots": 0,
+        "false_closures": 0,
+        "false_exception_lots": 0
+      },
+      "ingestion": {
+        "processed_n": 3076,
+        "start_cursor": 0,
+        "next_cursor": 3076,
+        "pages": 4,
+        "elapsed_seconds": 0.5391257000001133,
+        "deliveries_per_second": 5705.533978438338,
+        "retries": {}
+      },
+      "metrics": {
+        "receipts": 3076,
+        "invalid": 0,
+        "unique_payloads": 3000,
+        "identical_payload_repeats": 76,
+        "lot_states": {
+          "reconciled": 1000
+        },
+        "lots": 1000,
+        "event_states": {
+          "applied": 3000
+        },
+        "open_issues": 0,
+        "oldest_issue_seconds": 0,
+        "absolute_unexplained_minor": 0,
+        "movements": 2000
+      },
+      "peak_python_rss_bytes": 64475136
+    },
+    {
+      "case": "benchmark-1000-mixed",
+      "profile": "mixed",
+      "invoices": 1000,
+      "prepare_seconds": 0.37956990000020596,
+      "input_sha256": "5ce6e9d92e42bc493a7cab6d2254645323cae4595cce97a9af1fdbca799a662d",
+      "data_sha256": "0e83b4a1f285f2d275772fb2dd54db8227b39f04ecf1e9c5aa54e72df9ad2f17",
+      "oracle": {
+        "expected_exception_lots": 10,
+        "correct_exception_lots": 10,
+        "false_closures": 0,
+        "false_exception_lots": 0
+      },
+      "ingestion": {
+        "processed_n": 3076,
+        "start_cursor": 0,
+        "next_cursor": 3076,
+        "pages": 4,
+        "elapsed_seconds": 0.5517555000005814,
+        "deliveries_per_second": 5574.933099890729,
+        "retries": {}
+      },
+      "metrics": {
+        "receipts": 3076,
+        "invalid": 0,
+        "unique_payloads": 3000,
+        "identical_payload_repeats": 76,
+        "lot_states": {
+          "reconciled": 990,
+          "exception": 10
+        },
+        "lots": 1000,
+        "event_states": {
+          "applied": 3000
+        },
+        "open_issues": 10,
+        "oldest_issue_seconds": 0.39024,
+        "absolute_unexplained_minor": 1000,
+        "movements": 2000
+      },
+      "peak_python_rss_bytes": 65921024
+    },
+    {
+      "case": "benchmark-32500-mixed",
+      "profile": "mixed",
+      "invoices": 32500,
+      "prepare_seconds": 12.41514559999996,
+      "input_sha256": "bf6e115dc6962fb85eebe2e3acd57f1f0cb03e34476be00cd24708a70d454385",
+      "data_sha256": "2afb47a653115066ff42e410081cc15201fec3df8340682e07ba58d9eb35154b",
+      "oracle": {
+        "expected_exception_lots": 325,
+        "correct_exception_lots": 325,
+        "false_closures": 0,
+        "false_exception_lots": 0
+      },
+      "ingestion": {
+        "processed_n": 100000,
+        "start_cursor": 0,
+        "next_cursor": 100000,
+        "pages": 100,
+        "elapsed_seconds": 25.602155100000346,
+        "deliveries_per_second": 3905.9211855176463,
+        "retries": {}
+      },
+      "metrics": {
+        "receipts": 100000,
+        "invalid": 0,
+        "unique_payloads": 97500,
+        "identical_payload_repeats": 2500,
+        "lot_states": {
+          "reconciled": 32175,
+          "exception": 325
+        },
+        "lots": 32500,
+        "event_states": {
+          "applied": 97500
+        },
+        "open_issues": 325,
+        "oldest_issue_seconds": 26.122411,
+        "absolute_unexplained_minor": 32500,
+        "movements": 65000
+      },
+      "explain": {
+        "indexed": {
+          "Plan": {
+            "Node Type": "Index Scan",
+            "Parallel Aware": false,
+            "Async Capable": false,
+            "Scan Direction": "Forward",
+            "Index Name": "movements_payout",
+            "Relation Name": "movements",
+            "Alias": "movements",
+            "Startup Cost": 0.42,
+            "Total Cost": 10.29,
+            "Plan Rows": 2,
+            "Plan Width": 22,
+            "Actual Startup Time": 0.035,
+            "Actual Total Time": 0.036,
+            "Actual Rows": 2,
+            "Actual Loops": 1,
+            "Index Cond": "((case_id = 'benchmark-32500-mixed'::text) AND (payout_id = 'syn_p16000'::text))",
+            "Rows Removed by Index Recheck": 0,
+            "Shared Hit Blocks": 0,
+            "Shared Read Blocks": 4,
+            "Shared Dirtied Blocks": 0,
+            "Shared Written Blocks": 4,
+            "Local Hit Blocks": 0,
+            "Local Read Blocks": 0,
+            "Local Dirtied Blocks": 0,
+            "Local Written Blocks": 0,
+            "Temp Read Blocks": 0,
+            "Temp Written Blocks": 0
+          },
+          "Planning": {
+            "Shared Hit Blocks": 33,
+            "Shared Read Blocks": 4,
+            "Shared Dirtied Blocks": 0,
+            "Shared Written Blocks": 4,
+            "Local Hit Blocks": 0,
+            "Local Read Blocks": 0,
+            "Local Dirtied Blocks": 0,
+            "Local Written Blocks": 0,
+            "Temp Read Blocks": 0,
+            "Temp Written Blocks": 0
+          },
+          "Planning Time": 0.466,
+          "Triggers": [],
+          "Execution Time": 0.046
+        },
+        "forced_scan": {
+          "Plan": {
+            "Node Type": "Seq Scan",
+            "Parallel Aware": false,
+            "Async Capable": false,
+            "Relation Name": "movements",
+            "Alias": "movements",
+            "Startup Cost": 0.0,
+            "Total Cost": 2183.27,
+            "Plan Rows": 2,
+            "Plan Width": 22,
+            "Actual Startup Time": 2.948,
+            "Actual Total Time": 5.548,
+            "Actual Rows": 2,
+            "Actual Loops": 1,
+            "Filter": "((case_id = 'benchmark-32500-mixed'::text) AND (payout_id = 'syn_p16000'::text))",
+            "Rows Removed by Filter": 71216,
+            "Shared Hit Blocks": 7,
+            "Shared Read Blocks": 1108,
+            "Shared Dirtied Blocks": 1,
+            "Shared Written Blocks": 7,
+            "Local Hit Blocks": 0,
+            "Local Read Blocks": 0,
+            "Local Dirtied Blocks": 0,
+            "Local Written Blocks": 0,
+            "Temp Read Blocks": 0,
+            "Temp Written Blocks": 0
+          },
+          "Planning": {
+            "Shared Hit Blocks": 0,
+            "Shared Read Blocks": 0,
+            "Shared Dirtied Blocks": 0,
+            "Shared Written Blocks": 0,
+            "Local Hit Blocks": 0,
+            "Local Read Blocks": 0,
+            "Local Dirtied Blocks": 0,
+            "Local Written Blocks": 0,
+            "Temp Read Blocks": 0,
+            "Temp Written Blocks": 0
+          },
+          "Planning Time": 0.043,
+          "Triggers": [],
+          "Execution Time": 5.554
+        }
+      },
+      "peak_python_rss_bytes": 409104384
+    }
+  ]
+}

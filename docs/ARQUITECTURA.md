@@ -27,6 +27,8 @@ Un cierre requiere la última declaración final de una cadena lineal explícita
 
 Las devoluciones enlazan una captura y sus acumulados activos no pueden superar la captura. La reversión compensa íntegramente una captura, devolución o comisión y referencia el efecto original. La reversión de una captura con devoluciones activas se bloquea. El modelo mantiene todas estas dependencias dentro del mismo lote y deja los casos entre liquidaciones como una extensión.
 
+Una factura o un lote recibido más tarde se puede registrar de forma explícita. La operación conserva las referencias previas, registra el alta y reprocesa sus lotes afectados. La cobertura de factura distingue cobertura parcial, total, exceso y ausencia de cobro mediante el importe neto observado.
+
 La revisión humana añade una decisión con autor, motivo y efecto aplicado o declaración vigente. El comando exige que la excepción haya ocurrido y que el lote ya cumpla las invariantes. Anotar evidencia nunca modifica el total.
 
 ## Costos y límites
