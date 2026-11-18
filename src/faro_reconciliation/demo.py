@@ -88,7 +88,7 @@ def run(conn, case_id, output):
                 if after != before + int(fault == "after_commit"):
                     raise ReconciliationError(
                         "Fault injection checkpoint did not match transaction"
-                    )
+                    ) from None
                 recoveries.append({"fault": fault, "before": before, "after": after})
             else:
                 raise ReconciliationError("Expected interruption missing")

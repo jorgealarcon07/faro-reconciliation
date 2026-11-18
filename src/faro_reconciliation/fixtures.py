@@ -36,12 +36,22 @@ def event(number, role, kind, amount, invoice=True, ref=None, finalized=None, **
         "received_at": DATE,
         "reference_effect_id": ref,
         "finalized": finalized,
+        "expected_effect_ids": None,
         **overrides,
     }
 
 
-def statement(number, amount, *, final=True, role="payout", ref=None):
-    return event(number, role, "payout", amount, invoice=False, finalized=final, ref=ref)
+def statement(number, amount, *, final=True, role="payout", ref=None, members=("a",)):
+    return event(
+        number,
+        role,
+        "payout",
+        amount,
+        invoice=False,
+        finalized=final,
+        ref=ref,
+        expected_effect_ids=sorted(f"syn_e_{number}_{member}" for member in members),
+    )
 
 
 def write_bundle(directory, invoices, lots, deliveries, seed, scenario):
@@ -61,6 +71,7 @@ def write_bundle(directory, invoices, lots, deliveries, seed, scenario):
                 "declared_minor",
                 "finalized",
                 "supersedes_effect_id",
+                "expected_effect_ids",
             ]
         )
         for position, item in enumerate(deliveries):
@@ -73,6 +84,7 @@ def write_bundle(directory, invoices, lots, deliveries, seed, scenario):
                         item["amount_minor"],
                         str(item["finalized"]).lower(),
                         item["reference_effect_id"] or "",
+                        encode(item["expected_effect_ids"]),
                     ]
                 )
     checksums = {
@@ -112,10 +124,14 @@ def manual(directory):
         cap_a,
         event(1, "alias", "capture", 6000, business_effect_id="syn_e_1_a"),
         event(1, "fee", "fee", 300, invoice=False),
-        statement(1, 8600),
+        statement(1, 8600, members=("a", "b", "refund", "fee")),
     ]
     late = [cap_b]
-    corrected = [statement(1, 8700, role="revision", ref="syn_e_1_payout")]
+    corrected = [
+        statement(
+            1, 8700, role="revision", ref="syn_e_1_payout", members=("a", "b", "refund", "fee")
+        )
+    ]
     conflict = event(6, "a", "capture", 9000)
     controls = [
         event(2, "a", "capture", 4000),
@@ -131,15 +147,15 @@ def manual(directory):
         statement(6, 0),
         event(7, "a", "capture", 4000),
         event(7, "r", "refund", 5000, ref="syn_e_7_a"),
-        statement(7, 4000),
+        statement(7, 4000, members=("a", "r")),
         event(8, "rev", "reversal", 5000, ref="syn_e_8_a"),
         event(8, "a", "capture", 5000),
-        statement(8, 0),
+        statement(8, 0, members=("a", "rev")),
         event(9, "a", "capture", 10000),
         event(10, "a", "capture", 10000),
         event(10, "fee", "fee", 300, invoice=False),
         event(10, "rev", "reversal", 300, invoice=False, ref="syn_e_10_fee"),
-        statement(10, 10000),
+        statement(10, 10000, members=("a", "fee", "rev")),
     ]
     write_bundle(
         directory,
@@ -167,7 +183,7 @@ def bulk(directory, count, seed=2026, duplicate_every=13, profile="mixed"):
         group = [
             capture,
             event(number, "fee", "fee", fee, invoice=False),
-            statement(number, amount - fee - discrepancy),
+            statement(number, amount - fee - discrepancy, members=("a", "fee")),
         ]
         if profile != "clean":
             if duplicate_every and number % duplicate_every == 0:
@@ -232,6 +248,7 @@ class Bundle:
                     str(item["amount_minor"]),
                     str(item["finalized"]).lower(),
                     item["reference_effect_id"] or "",
+                    encode(item["expected_effect_ids"]),
                 )
         with (self.directory / "payouts.csv").open(encoding="utf-8", newline="") as stream:
             rows = list(csv.DictReader(stream))
@@ -242,6 +259,7 @@ class Bundle:
                 r["declared_minor"],
                 r["finalized"],
                 r["supersedes_effect_id"],
+                r["expected_effect_ids"],
             )
             for r in rows
         }

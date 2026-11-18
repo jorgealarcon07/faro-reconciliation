@@ -88,10 +88,11 @@ def main():
                     with store.connect() as conn:
                         conn.execute("CREATE DATABASE faro_reconcile")
                     break
-                except Exception:
+                except Exception as exc:
+                    last_error = exc
                     time.sleep(0.2)
             else:
-                raise RuntimeError("PostgreSQL did not start")
+                raise RuntimeError("PostgreSQL did not become reachable") from last_error
             os.environ["FARO2_DB_NAME"] = "faro_reconcile"
             os.environ["PYTHONPATH"] = str(ROOT / "src")
             # Explicit basetemp avoids the restricted sandbox AppData temp directory.

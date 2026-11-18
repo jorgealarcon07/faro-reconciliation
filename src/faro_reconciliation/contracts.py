@@ -33,7 +33,9 @@ def now():
 def write_json(path, obj):
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(
-        json.dumps(obj, indent=2, ensure_ascii=False, default=str) + "\n", encoding="utf-8"
+        json.dumps(obj, indent=2, ensure_ascii=False, default=str) + "\n",
+        encoding="utf-8",
+        newline="\n",
     )
 
 
@@ -86,6 +88,8 @@ def event_error(event):
         return "unexpected_finality"
     if kind == "payout" and not isinstance(event["finalized"], bool):
         return "finality_required"
+    if (kind == "payout") != isinstance(event["expected_effect_ids"], list):
+        return "invalid_settlement_membership"
     if kind != "payout" and event["amount_minor"] == 0:
         return "zero_movement"
     return None

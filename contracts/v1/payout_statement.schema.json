@@ -14,7 +14,8 @@
     "occurred_at",
     "received_at",
     "finalized",
-    "schema_version"
+    "schema_version",
+    "expected_effect_ids"
   ],
   "properties": {
     "namespace": {
@@ -78,6 +79,15 @@
     },
     "schema_version": {
       "const": "1.0.0"
+    },
+    "expected_effect_ids": {
+      "type": "array",
+      "uniqueItems": true,
+      "maxItems": 1000,
+      "items": {
+        "type": "string",
+        "pattern": "^syn_[A-Za-z0-9_-]{1,60}$"
+      }
     }
   },
   "additionalProperties": false

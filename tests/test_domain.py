@@ -43,8 +43,10 @@ def test_currency_units_and_duplicate_economic_effect_in_many_orders():
     second = event(1, "b", "capture", 4000)
     alias = {**capture, "event_id": "syn_alias"}
     refund = event(1, "r", "refund", 1000, ref="syn_e_1_b")
-    initial = statement(1, 8600)
-    revised = statement(1, 8700, role="revision", ref="syn_e_1_payout")
+    initial = statement(1, 8600, members=("a", "b", "r", "fee"))
+    revised = statement(
+        1, 8700, role="revision", ref="syn_e_1_payout", members=("a", "b", "r", "fee")
+    )
     fee = event(1, "fee", "fee", 300, invoice=False)
     events = [capture, alias, second, refund, fee, initial, revised]
     rng = random.Random(1)
@@ -73,7 +75,7 @@ def test_reversal_of_refund_restores_the_original_capture():
         event(1, "a", "capture", 4000),
         event(1, "r", "refund", 3000, ref="syn_e_1_a"),
         event(1, "rev", "reversal", 3000, ref="syn_e_1_r"),
-        statement(1, 4000),
+        statement(1, 4000, members=("a", "r", "rev")),
     ]
     lot = project("syn_p1", normalized(rows), {"syn_i1"}, True)
     assert lot.expected_minor == 4000 and lot.state == "reconciled"
@@ -107,3 +109,10 @@ def test_fixture_file_contains_no_personal_fields(tmp_path):
     bundle = Bundle(tmp_path)
     assert len(bundle.invoices) == 100
     assert all("card" not in json.dumps(row) for row in bundle.events)
+
+
+def test_matching_zero_cannot_close_a_lot_missing_offsetting_movements():
+    payout = statement(1, 0, members=("a", "rev"))
+    lot = project("syn_p1", normalized([payout]), {"syn_i1"}, True)
+    assert lot.difference_minor == 0 and lot.state == "exception"
+    assert {issue["subject"] for issue in lot.issues} == {"syn_e_1_a", "syn_e_1_rev"}

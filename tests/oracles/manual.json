@@ -51,6 +51,7 @@
       5000,
       5000,
       [
+        "missing_declared_effect",
         "missing_invoice",
         "payout_mismatch"
       ]
@@ -61,7 +62,8 @@
       0,
       0,
       [
-        "event_payload_conflict"
+        "event_payload_conflict",
+        "missing_declared_effect"
       ]
     ],
     "syn_p7": [
@@ -70,6 +72,7 @@
       4000,
       0,
       [
+        "missing_declared_effect",
         "refunds_exceed_capture"
       ]
     ],

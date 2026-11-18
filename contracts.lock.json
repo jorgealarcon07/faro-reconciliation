@@ -3,8 +3,8 @@
   "sha256": {
     "decision_record.schema.json": "9825f85e5e8afede8cf208ff69bc920d351dd88502b1303ae3a40c4555b9d488",
     "invoice.schema.json": "95de9aa0076f166dbe567f49572dafefe8dbba85c43555b2a0b46cd33a49dc94",
-    "payment_event.schema.json": "d1ab63bdc19d72735a0ce248192cf79bc9775ac459e869c56a9bac7a60277fa8",
-    "payout_statement.schema.json": "0226e7ba529f335d1ccba60e852f6d821cbadcaaec1e3b65c33af789b4e44709",
+    "payment_event.schema.json": "2ac73fedd8a6633cabb2688274583f0b82ed98fd63174f95de9298c95cd7f7d7",
+    "payout_statement.schema.json": "21df78080992dc0b75ee8d88fb6702e499bef5f6fa2ff287dd7f4714b639c09a",
     "run_manifest.schema.json": "832de8986ddd6fa45e084929008e24969cbebc9c22efff81349cc34b5d90168c"
   }
 }

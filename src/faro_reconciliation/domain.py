@@ -15,6 +15,7 @@ class Lot:
     difference_minor: int | None = None
     statement_effect_id: str | None = None
     finalized: bool = False
+    expected_effect_ids: list | None = None
     issues: list = field(default_factory=list)
     event_states: dict = field(default_factory=dict)
     movements: list = field(default_factory=list)
@@ -98,6 +99,7 @@ def resolve_statement(result, declarations):
     result.declared_minor = active["amount_minor"]
     result.statement_effect_id = current
     result.finalized = active["finalized"]
+    result.expected_effect_ids = active["expected_effect_ids"]
     for eid, event in declarations.items():
         result.event_states[event["event_id"]] = "applied" if eid == current else "superseded"
 
@@ -204,6 +206,13 @@ def project(payout_id, variants, invoice_ids, known, malformed=()):
             result.event_states[event_id] = "pending_dependency"
     if result.finalized and result.difference_minor != 0:
         result.issue("payout_mismatch", payout_id)
+    if result.finalized:
+        expected_ids = set(result.expected_effect_ids)
+        actual_ids = {m["effect_id"] for m in result.movements}
+        for effect_id in sorted(expected_ids - actual_ids):
+            result.issue("missing_declared_effect", effect_id)
+        for effect_id in sorted(actual_ids - expected_ids):
+            result.issue("unexpected_settlement_effect", effect_id)
     if result.issues:
         result.state = (
             "exception"
