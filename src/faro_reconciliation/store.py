@@ -98,6 +98,59 @@ def cursor(conn, case_id, feed_id):
     return row["next_cursor"] if row else 0
 
 
+def register_catalog(conn, case_id, *, invoice=None, payout_id=None):
+    """Accept an explicit late catalog reference and revisit its pending lots."""
+    if bool(invoice) == bool(payout_id):
+        raise ReconciliationError("Register exactly one invoice or payout reference")
+    with locked(conn, case_id):
+        if invoice is not None:
+            validate("invoice", invoice)
+            invoice_id = invoice["invoice_id"]
+            old = conn.execute(
+                "SELECT original_minor FROM recon.invoices WHERE case_id=%s AND invoice_id=%s",
+                (case_id, invoice_id),
+            ).fetchone()
+            if old:
+                if old["original_minor"] != invoice["original_minor"]:
+                    raise ReconciliationError("Existing invoice has a different original amount")
+                return False
+            conn.execute(
+                "INSERT INTO recon.invoices VALUES (%s,%s,%s)",
+                (case_id, invoice_id, invoice["original_minor"]),
+            )
+            lots = [
+                r["payout_id"]
+                for r in conn.execute(
+                    "SELECT DISTINCT payout_id FROM recon.inbox_event WHERE case_id=%s AND body->>'invoice_id'=%s",
+                    (case_id, invoice_id),
+                )
+            ]
+            evidence = invoice
+        else:
+            if not identifier(payout_id):
+                raise ReconciliationError("Invalid payout reference")
+            row = conn.execute(
+                "INSERT INTO recon.lots VALUES (%s,%s) ON CONFLICT DO NOTHING RETURNING payout_id",
+                (case_id, payout_id),
+            ).fetchone()
+            if not row:
+                return False
+            lots = [payout_id]
+            evidence = {"payout_id": payout_id}
+        audit(
+            conn,
+            case_id,
+            payout_id,
+            "catalog_registration",
+            "operator",
+            "Late reference registered",
+            evidence,
+        )
+        if lots:
+            _replace_projections(conn, case_id, _projection_inputs(conn, case_id, lots))
+    return True
+
+
 def audit(conn, case_id, payout_id, action, actor, reason, evidence):
     conn.execute(
         "INSERT INTO recon.audit(case_id,payout_id,action,actor,reason,evidence) "

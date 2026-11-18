@@ -222,3 +222,20 @@ def test_cli_demo_generates_auditable_static_consumer(conn, tmp_path):
     assert manifest["data_sha256"] == manifest["file_rebuild_sha256"]
     for name in ("index.html", "payouts.csv", "exceptions.csv", "invoices.csv"):
         assert (tmp_path / name).exists()
+
+
+def test_late_catalog_reference_replays_pending_events(conn, setup):
+    case, _, feed, _ = setup
+    ingest(conn, case, feed)
+    invoice = {**invoices_for(1)[0], "invoice_id": "syn_missing"}
+    assert report.detail(conn, case, "syn_p5")["event_states"]["syn_5_a"] == "pending_dependency"
+    assert store.register_catalog(conn, case, invoice=invoice)
+    assert not store.register_catalog(conn, case, invoice=invoice)
+    assert report.detail(conn, case, "syn_p5")["state"] == "reconciled"
+    new_lot = FileFeed(
+        "late-lot", [event(11, "a", "capture", 1000, invoice_id="syn_i1"), statement(11, 1000)]
+    )
+    ingest(conn, case, new_lot)
+    assert report.detail(conn, case, "syn_p11")["event_states"]["syn_11_a"] == "pending_dependency"
+    assert store.register_catalog(conn, case, payout_id="syn_p11")
+    assert report.detail(conn, case, "syn_p11")["state"] == "reconciled"

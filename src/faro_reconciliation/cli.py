@@ -36,7 +36,17 @@ def parser():
     apply.add_argument("--page-size", type=int, default=500)
     commands.add_parser("init-db")
     commands.add_parser("clean")
-    for name in ["ingest", "payout", "invoice", "queue", "resolve", "report", "validate", "demo"]:
+    for name in [
+        "ingest",
+        "payout",
+        "invoice",
+        "queue",
+        "resolve",
+        "report",
+        "validate",
+        "demo",
+        "register",
+    ]:
         command = apply if name == "ingest" else commands.add_parser(name)
         command.add_argument("--case", required=name != "demo")
         if name == "demo":
@@ -46,6 +56,10 @@ def parser():
             command.add_argument("--focus", default="syn_p1")
         elif name in ("payout", "invoice"):
             command.add_argument("identifier")
+        elif name == "register":
+            reference = command.add_mutually_exclusive_group(required=True)
+            reference.add_argument("--payout")
+            reference.add_argument("--invoice", type=Path)
         elif name == "resolve":
             command.add_argument("--payout", required=True)
             command.add_argument("--issue", required=True)
@@ -94,6 +108,13 @@ def execute(conn, args):
         return invoice
     if cmd == "queue":
         return report.queue(conn, args.case, report.snapshot(conn, args.case))
+    if cmd == "register":
+        invoice = json.loads(args.invoice.read_text(encoding="utf-8")) if args.invoice else None
+        return {
+            "recorded": store.register_catalog(
+                conn, args.case, invoice=invoice, payout_id=args.payout
+            )
+        }
     if cmd == "resolve":
         return {
             "recorded": store.resolution(
