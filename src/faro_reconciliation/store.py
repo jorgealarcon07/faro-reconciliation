@@ -45,6 +45,7 @@ def connect():
         connect_timeout=8,
         row_factory=dict_row,
         application_name="faro-reconciliation",
+        options="-c timezone=UTC",
         autocommit=True,
     )
 

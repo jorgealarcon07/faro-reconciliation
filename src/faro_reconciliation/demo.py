@@ -59,12 +59,19 @@ def verify_oracle(snapshot, path=None):
 
 def run(conn, case_id, output):
     start = time.perf_counter()
+    if len(case_id) > 72:
+        raise ReconciliationError("Demo case ID must leave room for the rebuild suffix")
+    fresh_case = case_id + "-rebuild"
+    store.initialize(conn)
+    if conn.execute(
+        "SELECT 1 FROM recon.cases WHERE case_id=ANY(%s)", ([case_id, fresh_case],)
+    ).fetchone():
+        raise ReconciliationError("Demo requires a fresh case ID")
     output = Path(output)
     bundle_dir = output / "fixture"
     limits = manual(bundle_dir)
     bundle = Bundle(bundle_dir)
     feed = FileFeed(bundle.manifest["dataset_sha256"], bundle.events)
-    store.initialize(conn)
     store.prepare(conn, case_id, bundle)
     stages = {}
     with simulator(feed, faults=True) as url:
@@ -98,7 +105,6 @@ def run(conn, case_id, output):
     if not store.resolution(conn, case_id, decision()):
         raise ReconciliationError("Demo requires a fresh case ID")
     payload = report.export(conn, case_id, output)
-    fresh_case = case_id + "-rebuild"
     store.prepare(conn, fresh_case, bundle)
     ingest(conn, fresh_case, feed, page_size=40)
     fresh = report.snapshot(conn, fresh_case)

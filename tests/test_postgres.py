@@ -47,7 +47,17 @@ def test_http_retries_and_complete_file_oracle(conn, setup):
         result = ingest(conn, case, HttpFeed(url, feed.feed_id), page_size=5)
     assert result["retries"] == {"429": 1, "500": 1}
     assert result["processed_n"] == len(feed.events)
-    assert demo.verify_oracle(report.snapshot(conn, case))["false_closures"] == 0
+    snapshot = report.snapshot(conn, case)
+    assert demo.verify_oracle(snapshot)["false_closures"] == 0
+    invoice_states = {r["invoice_id"]: r["coverage_state"] for r in snapshot["invoices"]}
+    assert [invoice_states[key] for key in ("syn_i2", "syn_i3", "syn_i8", "syn_i10")] == [
+        "partially_covered",
+        "overpaid",
+        "uncovered",
+        "covered",
+    ]
+    first = report.detail(conn, case, "syn_p1")["receipts"][0]
+    assert first["received_at"].utcoffset().total_seconds() == 0
 
 
 def test_page_effect_and_checkpoint_rollback_together(conn, setup):

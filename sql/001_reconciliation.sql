@@ -63,6 +63,11 @@ CREATE INDEX IF NOT EXISTS audit_lot ON recon.audit(case_id,payout_id,audit_id);
 CREATE OR REPLACE VIEW recon.invoice_coverage AS
 SELECT i.case_id, i.invoice_id, i.original_minor,
        coalesce(sum(m.invoice_delta_minor),0)::bigint AS net_collected_minor,
-       (i.original_minor - coalesce(sum(m.invoice_delta_minor),0))::bigint AS coverage_difference_minor
+       (i.original_minor - coalesce(sum(m.invoice_delta_minor),0))::bigint AS coverage_difference_minor,
+       CASE WHEN coalesce(sum(m.invoice_delta_minor),0) < 0 THEN 'net_refunded'
+            WHEN coalesce(sum(m.invoice_delta_minor),0) = 0 THEN 'uncovered'
+            WHEN sum(m.invoice_delta_minor) < i.original_minor THEN 'partially_covered'
+            WHEN sum(m.invoice_delta_minor) = i.original_minor THEN 'covered'
+            ELSE 'overpaid' END AS coverage_state
 FROM recon.invoices i LEFT JOIN recon.movements m USING (case_id, invoice_id)
 GROUP BY i.case_id, i.invoice_id, i.original_minor;

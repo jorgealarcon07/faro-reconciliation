@@ -73,8 +73,14 @@ def event_error(event):
     error = next(PAYMENT.iter_errors(event), None)
     if error is not None:
         return "invalid_" + (str(error.path[0]) if error.path else "contract")
-    if any(not event[key].endswith("Z") for key in ("occurred_at", "received_at")):
-        return "invalid_utc_timestamp"
+    for key in ("occurred_at", "received_at"):
+        value = event[key]
+        if not re.fullmatch(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{1,6})?Z", value):
+            return "invalid_utc_timestamp"
+        try:
+            datetime.fromisoformat(value)
+        except ValueError:
+            return "invalid_utc_timestamp"
     kind = event["event_type"]
     if kind in ("capture", "refund") and not event["invoice_id"]:
         return "invoice_required"

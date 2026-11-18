@@ -20,7 +20,7 @@ def snapshot(conn, case_id):
         "payouts": [{k: v for k, v in item.items() if k != "case_id"} for item in rows],
         "invoices": conn.execute(
             "SELECT invoice_id,original_minor,net_collected_minor,"
-            "coverage_difference_minor FROM recon.invoice_coverage WHERE case_id=%s ORDER BY invoice_id",
+            "coverage_difference_minor,coverage_state FROM recon.invoice_coverage WHERE case_id=%s ORDER BY invoice_id",
             (case_id,),
         ).fetchall(),
         "movements": conn.execute(
@@ -202,7 +202,13 @@ def export(conn, case_id, folder, focus="syn_p1"):
     write_csv(
         folder / "invoices.csv",
         state["invoices"],
-        ["invoice_id", "original_minor", "net_collected_minor", "coverage_difference_minor"],
+        [
+            "invoice_id",
+            "original_minor",
+            "net_collected_minor",
+            "coverage_difference_minor",
+            "coverage_state",
+        ],
     )
     template = (ROOT / "assets/report.html").read_text(encoding="utf-8")
     encoded = json.dumps(payload, ensure_ascii=False, default=str).replace("<", "\\u003c")
