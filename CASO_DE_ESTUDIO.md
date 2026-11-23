@@ -1,5 +1,7 @@
 # Faro · Conciliación de pagos con trazabilidad
 
+[English](CASE_STUDY.md)
+
 ## Problema
 
 Un equipo de operaciones recibe capturas, devoluciones y comisiones mientras el procesador declara los abonos. Si se suman las entregas sin distinguir su identidad, una repetición puede inflar el importe. Si una devolución llega antes que la captura, también puede quedar sin explicación. El equipo necesita saber qué lote puede cerrar, qué movimiento falta y qué evidencia respalda una corrección.
