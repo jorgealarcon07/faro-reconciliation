@@ -12,6 +12,8 @@ Construí una conciliación que compara cobros y abonos, reconoce mensajes repet
 
 [Abrir el informe en el navegador](https://jorgealarcon07.github.io/jorgealarcon07/conciliacion-de-pagos/) · [Leer el caso de estudio](CASO_DE_ESTUDIO.md) · [Ver la arquitectura](docs/ARQUITECTURA.md)
 
+El informe permite cambiar a inglés desde el encabezado. La demo local genera `index.html` e `index.en.html` con los mismos abonos, excepciones y descargas.
+
 ![Cola de diferencias de conciliación con el lote y su motivo de revisión](assets/web/excepciones.png)
 
 ## Cómo se construyó

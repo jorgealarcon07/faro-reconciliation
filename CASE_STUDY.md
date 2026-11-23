@@ -16,7 +16,7 @@ In the pilot, two captures of 6,000 and 4,000, a refund of 1,000 and a fee of 30
 
 ## What the test showed
 
-- An independently specified answer checked all ten pilot batches. Five reconciled, two remained provisional and three stayed in exception. The naive sum over receipts was 20,700 for the example payout. The reconciliation pipeline got 8,700, retained the eight associated receipts and recorded the resolution. HTTP ingestion and file replay produced the same canonical hash. [Pilot manifest](reports/demo/manifest.json) · [Open interactive report (Spanish)](https://jorgealarcon07.github.io/jorgealarcon07/conciliacion-de-pagos/)
+- An independently specified answer checked all ten pilot batches. Five reconciled, two remained provisional and three stayed in exception. The naive sum over receipts was 20,700 for the example payout. The reconciliation pipeline got 8,700, retained the eight associated receipts and recorded the resolution. HTTP ingestion and file replay produced the same canonical hash. [Pilot manifest](reports/demo/manifest.json) · [Open interactive report](https://jorgealarcon07.github.io/jorgealarcon07/conciliacion-de-pagos/index.en.html)
 - A load test with 100,000 simulated event deliveries detected all 325 batches with planted discrepancies, with zero false closures in that test. The suite also checked late corrections, conflicting variants and interruptions on either side of the commit. [Benchmark (Spanish)](docs/RESULTADOS.md) · [Test results](reports/tests.xml)
 
 ## What I learned

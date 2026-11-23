@@ -220,8 +220,12 @@ def test_cli_demo_generates_auditable_static_consumer(conn, tmp_path):
     assert result.returncode == 0, result.stderr
     manifest = json.loads((tmp_path / "manifest.json").read_text(encoding="utf-8"))
     assert manifest["data_sha256"] == manifest["file_rebuild_sha256"]
-    for name in ("index.html", "payouts.csv", "exceptions.csv", "invoices.csv"):
+    for name in ("payouts.csv", "exceptions.csv", "invoices.csv"):
         assert (tmp_path / name).exists()
+    for language, filename in [("es", "index.html"), ("en", "index.en.html")]:
+        html = (tmp_path / filename).read_text(encoding="utf-8")
+        assert f'<html lang="{language}">' in html
+        assert 'href="payouts.csv"' in html
 
 
 def test_late_catalog_reference_replays_pending_events(conn, setup):

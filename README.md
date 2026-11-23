@@ -10,7 +10,7 @@ I built a reconciliation pipeline for a fictional treasury team. It matches proc
 
 **Measured result.** In a test with 100,000 simulated event deliveries, the pipeline identified all 325 payout batches with deliberately introduced discrepancies. None was marked as reconciled.
 
-[Case study](CASE_STUDY.md) · [Open interactive report (Spanish)](https://jorgealarcon07.github.io/jorgealarcon07/conciliacion-de-pagos/) · [Architecture (Spanish)](docs/ARQUITECTURA.md)
+[Case study](CASE_STUDY.md) · [Open interactive report](https://jorgealarcon07.github.io/jorgealarcon07/conciliacion-de-pagos/index.en.html) · [Architecture (Spanish)](docs/ARQUITECTURA.md)
 
 ![Exception queue from the Spanish report, with the batch and reason for review](assets/web/excepciones.png)
 
@@ -35,3 +35,5 @@ faro-reconcile demo --output local/pilot
 ```
 
 Open `local/pilot/index.html` to review the pilot. The [full guide in Spanish](README.es.md) also covers the isolated PostgreSQL runner, the larger test, HTTP ingestion and recovery.
+
+Both report languages share the same evidence files. The [saved English report](reports/demo/index.en.html) also opens from a local checkout.

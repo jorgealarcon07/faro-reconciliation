@@ -8,6 +8,7 @@ from pathlib import Path
 
 from . import store
 from .contracts import NAMESPACE, ROOT, ReconciliationError, digest, now, write_json
+from .report_language import REPORT_FILES, localize
 
 
 def snapshot(conn, case_id):
@@ -210,13 +211,17 @@ def export(conn, case_id, folder, focus="syn_p1"):
             "coverage_state",
         ],
     )
-    template = (ROOT / "assets/report.html").read_text(encoding="utf-8")
-    encoded = json.dumps(payload, ensure_ascii=False, default=str).replace("<", "\\u003c")
-    (folder / "index.html").write_text(
-        template.replace("@@CASE@@", html.escape(case_id)).replace("@@PAYLOAD@@", encoded),
-        encoding="utf-8",
-    )
+    render_pages(folder, payload)
     return payload
+
+
+def render_pages(folder, payload):
+    """Render both views from one reconciliation snapshot and shared exports."""
+    template = (ROOT / "assets/report.html").read_text(encoding="utf-8")
+    encoded = json.dumps(payload, ensure_ascii=False, default=str).replace("<", r"\u003c")
+    for language, filename in REPORT_FILES.items():
+        page = localize(template, language).replace("@@CASE@@", html.escape(payload["case"]))
+        (folder / filename).write_text(page.replace("@@PAYLOAD@@", encoded), encoding="utf-8")
 
 
 def baseline_naive(events, payout_id):

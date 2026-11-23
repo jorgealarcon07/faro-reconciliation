@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="es">
+<html lang="@@lang@@">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Faro · Conciliación</title>
+<title>@@text_title@@</title>
 <style>
 :root{color-scheme:light;--ink:#172e36;--sub:#4d646b;--line:#d8e3e1;--bg:#edf4f1;--brand:#136f5a}
 *{box-sizing:border-box}body{margin:0;color:var(--ink);background:var(--bg);font:15px/1.5 "Segoe UI",system-ui,sans-serif}
@@ -18,57 +18,78 @@ td,th{border-bottom:1px solid var(--line);padding:.55rem .5rem;text-align:left;v
 td{font-variant-numeric:tabular-nums}.reconciled{color:#087253;font-weight:650}.exception{color:#9a4218;font-weight:650}
 footer{padding:1rem 0;font-size:.85rem}section+section{margin-top:.85rem}.grid section+section{margin-top:0}
 @media(max-width:800px){.cards,.grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:550px){.grid{grid-template-columns:1fr}}
+.language{padding:.45rem max(1rem,5vw);background:#fff}.language a{color:#075e57;font:600 14px/1.5 system-ui,sans-serif;text-underline-offset:.18em}
 </style>
 </head>
-<body>
-<header><div class="kicker">Faro · Operaciones de pagos</div><h1>Conciliación y excepciones</h1><div>@@CASE@@ · COP · unidades menores</div></header>
+<body><div class="language"><a href="@@other_file@@" hreflang="@@other_lang@@" lang="@@other_lang@@">@@other_label@@</a></div>
+<header><div class="kicker">@@text_brand@@</div><h1>@@text_heading@@</h1><div>@@text_units@@</div></header>
 <main>
-<p class="notice">Datos sintéticos. La diferencia de cobertura de una factura requiere contexto comercial.</p>
+<p class="notice">@@text_notice@@</p>
 <div class="cards" id="cards"></div>
-<nav role="tablist" aria-label="Vistas de conciliación">
-<button role="tab" id="tab-lots" aria-controls="lots" aria-selected="true">Abonos</button>
-<button role="tab" id="tab-queue" aria-controls="queue" aria-selected="false">Cola de excepciones</button>
-<button role="tab" id="tab-trace" aria-controls="trace" aria-selected="false">Trazabilidad</button>
+<nav role="tablist" aria-label="@@text_views@@">
+<button role="tab" id="tab-lots" aria-controls="lots" aria-selected="true">@@text_payouts@@</button>
+<button role="tab" id="tab-queue" aria-controls="queue" aria-selected="false">@@text_queue@@</button>
+<button role="tab" id="tab-trace" aria-controls="trace" aria-selected="false">@@text_trace@@</button>
 </nav>
 <div id="lots" role="tabpanel" aria-labelledby="tab-lots">
-<section><h2>Estado de los lotes</h2>
-<label>Estado <select id="filter"><option value="">Todos</option><option value="reconciled">Conciliado</option><option value="exception">Excepción</option><option value="provisional">Provisional</option></select></label>
+<section><h2>@@text_lot_state@@</h2>
+<label>@@text_state@@ <select id="filter"><option value="">@@text_all@@</option><option value="reconciled">@@text_reconciled@@</option><option value="exception">@@text_exception@@</option><option value="provisional">@@text_provisional@@</option></select></label>
 <div class="scroll" id="payout-table"></div><p class="meta" id="payout-count"></p>
-<a href="payouts.csv">Descargar abonos CSV</a> · <a href="invoices.csv">Descargar cobertura CSV</a>
+<a href="payouts.csv">@@text_payout_csv@@</a> · <a href="invoices.csv">@@text_invoice_csv@@</a>
 </section></div>
 <div id="queue" role="tabpanel" aria-labelledby="tab-queue" hidden>
-<section><h2>Excepciones abiertas</h2><div class="scroll" id="queue-table"></div>
-<p class="meta">Prioridad por antigüedad y magnitud de la diferencia. La resolución requiere evidencia aplicada.</p>
-<a href="exceptions.csv">Descargar cola CSV</a></section>
+<section><h2>@@text_open_issues@@</h2><div class="scroll" id="queue-table"></div>
+<p class="meta">@@text_priority@@</p>
+<a href="exceptions.csv">@@text_queue_csv@@</a></section>
 </div>
 <div id="trace" role="tabpanel" aria-labelledby="tab-trace" hidden>
 <section><h2 id="focus-title"></h2><p class="meta" id="focus-caption"></p></section>
-<div class="grid" style="margin-top:.9rem"><section><h2>Movimientos que explican el abono</h2><div class="scroll" id="movement-table"></div></section>
-<section><h2>Entregas recibidas</h2><div class="scroll" id="receipt-table"></div></section></div>
-<section><h2>Auditoría y evidencia de resolución</h2><div class="scroll" id="audit-table"></div></section>
+<div class="grid" style="margin-top:.9rem"><section><h2>@@text_movements@@</h2><div class="scroll" id="movement-table"></div></section>
+<section><h2>@@text_deliveries@@</h2><div class="scroll" id="receipt-table"></div></section></div>
+<section><h2>@@text_audit@@</h2><div class="scroll" id="audit-table"></div></section>
 </div>
-<footer>Simulación CC0 · <a href="reconciliation.json">Datos y trazabilidad JSON</a> · <span id="generated"></span></footer>
+<footer>@@text_license@@ <a href="reconciliation.json">@@text_json@@</a> · <span id="generated"></span></footer>
 </main>
 <script type="application/json" id="payload">@@PAYLOAD@@</script>
+<script id="report-copy" type="application/json">@@js_copy@@</script>
 <script>
+const copy=JSON.parse(document.getElementById('report-copy').textContent);
 const data=JSON.parse(document.getElementById('payload').textContent);
 const el=id=>document.getElementById(id);
-const number=value=>value===null||value===undefined?'—':Number(value).toLocaleString('es-CO');
-const states={reconciled:'Conciliado',exception:'Excepción',provisional:'Provisional'};
+const number=value=>value===null||value===undefined?'—':Number(value).toLocaleString(copy.js_locale);
+const states={reconciled:copy.js_reconciled,exception:copy.js_exception,provisional:copy.js_provisional};
+const displayCodes={
+  event_type:{capture:copy.js_capture,refund:copy.js_refund,fee:copy.js_fee},
+  action:{projection:copy.js_projection,resolution:copy.js_resolution},
+  code:{
+    event_payload_conflict:copy.js_event_payload_conflict,
+    missing_declared_effect:copy.js_missing_declared_effect,
+    missing_invoice:copy.js_missing_invoice,
+    payout_mismatch:copy.js_payout_mismatch,
+    refunds_exceed_capture:copy.js_refunds_exceed_capture
+  },
+  reason:{
+    'Recomputed from immutable receipts':copy.js_recomputed,
+    'La declaración revisada coincide con captura, devolución y comisión.':copy.js_demo_resolution
+  }
+};
 function table(id, rows, cols){
   const root=el(id), output=document.createElement('table'), head=output.createTHead().insertRow();
   for(const [,label] of cols){const item=document.createElement('th');item.scope='col';item.textContent=label;head.append(item)}
   const body=output.createTBody();
   for(const row of rows){const tr=body.insertRow();for(const [key] of cols){
     const cell=tr.insertCell(), value=row[key];
-    cell.textContent=key==='state'?(states[value]??value):key.endsWith('_minor')?number(value):value??'—';
+    const entries=displayCodes[key];
+    const display=entries && Object.hasOwn(entries,value) ? entries[value] : undefined;
+    cell.textContent=key==='state'?(states[value]??value):key.endsWith('_minor')?number(value):display??value??'—';
+    if(display && display!==value)cell.title=value;
     if(key==='state')cell.className=value;
   }}
-  if(!rows.length){const cell=body.insertRow().insertCell();cell.colSpan=cols.length;cell.textContent='Sin registros'}
+  if(!rows.length){const cell=body.insertRow().insertCell();cell.colSpan=cols.length;cell.textContent=copy.js_empty}
   root.replaceChildren(output);
 }
 const m=data.metrics;
-for(const [value,label] of [[m.receipts,'Entregas auditadas'],[m.lot_states.reconciled??0,'Lotes conciliados'],[m.open_issues,'Excepciones abiertas'],[m.identical_payload_repeats,'Entregas repetidas']]){
+for(const [value,label] of [[m.receipts,copy.js_audited],[m.lot_states.reconciled??0,copy.js_matches],[m.open_issues,copy.js_open],[m.identical_payload_repeats,copy.js_duplicates]]){
   const card=document.createElement('div'), strong=document.createElement('strong'), title=document.createElement('span');
   card.className='card'; strong.textContent=number(value); title.textContent=label; card.append(strong,title);el('cards').append(card)
 }
@@ -88,18 +109,18 @@ selectTab(tabs[0]);
 function renderPayouts(){
   const chosen=el('filter').value;
   const rows=data.snapshot.payouts.filter(p=>!chosen||p.state===chosen);
-  table('payout-table',rows.slice(0,100),[['payout_id','Abono'],['state','Estado'],['expected_minor','Esperado'],['declared_minor','Declarado'],['difference_minor','Diferencia']]);
-  el('payout-count').textContent=number(Math.min(rows.length,100))+' de '+number(rows.length)+' lotes filtrados. El CSV incluye todos los lotes.';
+  table('payout-table',rows.slice(0,100),[['payout_id',copy.js_payout],['state',copy.js_state],['expected_minor',copy.js_expected],['declared_minor',copy.js_declared],['difference_minor',copy.js_difference]]);
+  el('payout-count').textContent=number(Math.min(rows.length,100))+copy.js_of+number(rows.length)+copy.js_filtered;
 }
 el('filter').addEventListener('change',renderPayouts);renderPayouts();
-table('queue-table',data.exceptions.slice(0,100),[['payout_id','Abono'],['code','Motivo'],['subject','Referencia'],['difference_minor','Diferencia'],['opened_at','Primera detección UTC']]);
+table('queue-table',data.exceptions.slice(0,100),[['payout_id',copy.js_payout],['code',copy.js_reason],['subject',copy.js_reference],['difference_minor',copy.js_difference],['opened_at',copy.js_first_seen]]);
 const focus=data.detail;
-el('focus-title').textContent=focus?'Abono '+focus.payout_id:'Abono sin detalle';
-el('focus-caption').textContent=focus?(states[focus.state]+' · '+number(focus.expected_minor)+' esperado · '+number(focus.declared_minor)+' declarado'):'Consulta la CLI para abrir otro lote.';
-table('movement-table',focus?.movements??[],[['event_type','Tipo'],['effect_id','Efecto'],['signed_minor','Importe firmado']]);
-table('receipt-table',focus?.receipts??[],[['position','Posición'],['event_id','Evento'],['received_at','Recepción UTC']]);
+el('focus-title').textContent=focus?copy.js_payout_prefix+focus.payout_id:copy.js_no_focus;
+el('focus-caption').textContent=focus?(states[focus.state]+' · '+number(focus.expected_minor)+copy.js_expected_suffix+number(focus.declared_minor)+copy.js_declared_suffix):copy.js_cli;
+table('movement-table',focus?.movements??[],[['event_type',copy.js_type],['effect_id',copy.js_effect],['signed_minor',copy.js_signed]]);
+table('receipt-table',focus?.receipts??[],[['position',copy.js_position],['event_id',copy.js_event],['received_at',copy.js_received]]);
 table('audit-table',(focus?.audit??[]).map(a=>({...a,reference:a.evidence.evidence_effect_id??a.evidence.statement_effect_id})),
-  [['action','Acción'],['actor','Rol'],['reason','Motivo'],['reference','Evidencia']]);
+  [['action',copy.js_action],['actor',copy.js_role],['reason',copy.js_reason],['reference',copy.js_evidence]]);
 el('generated').textContent=data.generated_at;
 </script>
 </body>
