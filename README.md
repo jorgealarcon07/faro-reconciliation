@@ -1,16 +1,24 @@
-# Faro · Payment Reconciliation
+# Conciliación de pagos
 
-**Project 02 · Data Engineering.** A local reconciliation pipeline ingests paginated synthetic payment deliveries into PostgreSQL, deduplicates economic effects and records why each payout can close. Its review queue and audit trail preserve late arrivals, conflicting variants and corrections.
+**Data Engineering** · Pagos simulados · COP · [Portafolio de Jorge Alarcón](https://github.com/jorgealarcon07#proyectos)
 
-Faro es una empresa ficticia del portafolio. El piloto usa datos sintéticos en COP y licencia CC0. Los resultados miden integridad y operación del laboratorio. [Fuentes y procedencia](DATA_SOURCES.md).
+![Python](assets/stack/python.svg) ![SQL · PostgreSQL](assets/stack/postgresql.svg) ![API HTTP](assets/stack/http.svg) ![pytest](assets/stack/pytest.svg)
 
-![Reporte de conciliación](assets/web/abonos.png)
+## ¿Qué abonos cuadran con lo que se cobró?
 
-- [Caso de estudio](CASO_DE_ESTUDIO.md)
-- [Reporte HTML y exportaciones del piloto](reports/demo/index.html)
-- [Arquitectura](docs/ARQUITECTURA.md) y [contratos](docs/CONTRATOS.md)
-- [Resultados y límites](docs/RESULTADOS.md), [JUnit](reports/tests.xml) y [cumplimiento](docs/CUMPLIMIENTO.md)
-- [Operación y recuperación](docs/RUNBOOK.md)
+Construí una conciliación que compara cobros y abonos, reconoce mensajes repetidos y entrega a tesorería una lista de diferencias con su historial. Tesorería puede cerrar un abono que cuadra, dejarlo pendiente si falta una referencia o investigar una diferencia hasta el movimiento de origen. Los resultados provienen de operaciones sintéticas en pesos colombianos.
+
+**Resultado medido.** En una prueba de 100.000 entregas simuladas, detectó los 325 lotes con diferencias sembradas. Ninguno de esos lotes se marcó como conciliado.
+
+[Abrir el informe en el navegador](https://jorgealarcon07.github.io/jorgealarcon07/conciliacion-de-pagos/) · [Leer el caso de estudio](CASO_DE_ESTUDIO.md) · [Ver la arquitectura](docs/ARQUITECTURA.md)
+
+![Cola de diferencias de conciliación con el lote y su motivo de revisión](assets/web/excepciones.png)
+
+## Cómo se construyó
+
+El proceso recibe páginas de un proveedor simulado por HTTP y registra cada recepción en PostgreSQL. Distingue una copia de un pago distinto, aplica correcciones y guarda el punto desde el que puede reanudar la carga. La prueba compara el resultado con discrepancias conocidas de antemano.
+
+[Prueba de 100.000 entregas](docs/RESULTADOS.md) · [Diferencias del piloto](reports/demo/exceptions.csv) · [Historial de un abono](assets/web/trazabilidad.png)
 
 ## Ejecutar en un entorno aislado
 
